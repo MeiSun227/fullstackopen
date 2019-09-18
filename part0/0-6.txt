@@ -1,0 +1,15 @@
+title Single page new Note
+
+note over browser: 
+spa update inputs data
+end note
+note over browser:
+browser send data back to server with json format
+end note 
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+
+note over server:
+received and update new data
+end note
+
+server->browser: responson successful create 
