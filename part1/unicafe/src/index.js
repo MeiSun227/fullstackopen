@@ -33,6 +33,14 @@ const Statistics = ({ statistic, good, bad, neutral }) => {
 
 
   }
+  if (sum() === 0) {
+    return (
+      <div>
+        <Header header={statistic} />
+        <p>No feedback given</p>
+      </div>
+    )
+  }
   return (<div><Header header={statistic} />
     <p>good: {good}</p>
     <p>neutral: {neutral}</p>
