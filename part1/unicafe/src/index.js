@@ -8,6 +8,12 @@ const Header = (props) => {
   )
 }
 
+const Statistic = ({ text, value }) => {
+  return (
+    <p>{text} {value}</p>
+  )
+}
+
 const Statistics = ({ statistic, good, bad, neutral }) => {
 
   const sum = () => {
@@ -29,7 +35,7 @@ const Statistics = ({ statistic, good, bad, neutral }) => {
     if (sum() === 0) {
       return 0
     }
-    return (good / sum() * 100).toFixed(2)
+    return (good / sum() * 100).toFixed(2) + "%"
 
 
   }
@@ -41,16 +47,23 @@ const Statistics = ({ statistic, good, bad, neutral }) => {
       </div>
     )
   }
-  return (<div><Header header={statistic} />
-    <p>good: {good}</p>
-    <p>neutral: {neutral}</p>
-    <p>bad: {bad}</p>
-    <p>all: {sum()}</p>
-    <p>average : {averageCalculate()}</p>
-    <p>positive : {positiveCalculate()}%</p>
-  </div>)
+  return (
+    <div>
+      <Header header={statistic} />
+      <Statistic text="good: " value={good} />
+      <Statistic text="neutral: " value={neutral} />
+      <Statistic text="bad: " value={bad} />
+      <Statistic text="all: " value={sum()} />
+      <Statistic text="average: " value={averageCalculate()} />
+      <Statistic text="positive:  " value={positiveCalculate()} />
+    </div>)
 }
+const Button = ({ onClick, text }) => {
+  return (
+    <button onClick={onClick}>{text}</button>
+  )
 
+}
 const App = () => {
   // save clicks of each button to own state
   const header = 'Give feedback'
@@ -77,9 +90,10 @@ const App = () => {
   return (
     <div>
       <Header header={header} />
-      <button onClick={handleGoodClick}>good</button>
-      <button onClick={handleNeutralClick}>neutral</button>
-      <button onClick={handleBadClick}>bad</button>
+      <Button onClick={handleGoodClick} text="good" />
+      <Button onClick={handleNeutralClick} text="neutral" />
+      <Button onClick={handleBadClick} text="bad" />
+
       <Statistics statistic={statistic} good={good} neutral={neutral} bad={bad} />
     </div>
   )
