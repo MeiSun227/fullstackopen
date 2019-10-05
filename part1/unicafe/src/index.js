@@ -10,7 +10,9 @@ const Header = (props) => {
 
 const Statistic = ({ text, value }) => {
   return (
-    <p>{text} {value}</p>
+    <tr>
+      <td>{text}</td><td>{value}</td>
+    </tr>
   )
 }
 
@@ -41,22 +43,27 @@ const Statistics = ({ statistic, good, bad, neutral }) => {
   }
   if (sum() === 0) {
     return (
-      <div>
+      <>
         <Header header={statistic} />
         <p>No feedback given</p>
-      </div>
+      </>
     )
   }
   return (
-    <div>
+    <>
       <Header header={statistic} />
-      <Statistic text="good: " value={good} />
-      <Statistic text="neutral: " value={neutral} />
-      <Statistic text="bad: " value={bad} />
-      <Statistic text="all: " value={sum()} />
-      <Statistic text="average: " value={averageCalculate()} />
-      <Statistic text="positive:  " value={positiveCalculate()} />
-    </div>)
+      <table>
+        <tbody>
+          <Statistic text="good: " value={good} />
+          <Statistic text="neutral: " value={neutral} />
+          <Statistic text="bad: " value={bad} />
+          <Statistic text="all: " value={sum()} />
+          <Statistic text="average: " value={averageCalculate()} />
+          <Statistic text="positive:  " value={positiveCalculate()} />
+        </tbody>
+      </table>
+    </>
+  )
 }
 const Button = ({ onClick, text }) => {
   return (
@@ -88,14 +95,14 @@ const App = () => {
   }
 
   return (
-    <div>
+    <>
       <Header header={header} />
       <Button onClick={handleGoodClick} text="good" />
       <Button onClick={handleNeutralClick} text="neutral" />
       <Button onClick={handleBadClick} text="bad" />
 
       <Statistics statistic={statistic} good={good} neutral={neutral} bad={bad} />
-    </div>
+    </>
   )
 }
 
