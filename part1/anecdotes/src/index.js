@@ -6,15 +6,24 @@ const App = (props) => {
     const handleAnecdotesClick = () => {
         const anecdotesIndex = Math.floor(Math.random() * anecdotes.length)
 
-        console.log(Math.floor(Math.random() * anecdotes.length));
+
         setSelected(anecdotesIndex)
 
+    }
+    const [vote, setVote] = useState(new Array(anecdotes.length).fill(0))
+    const handleVoteClick = () => {
+        const copy = [...vote]
+        copy[selected] += 1
+
+        setVote(copy)
     }
 
     return (
         <div>
-            {props.anecdotes[selected]} <br/>
+            {props.anecdotes[selected]} <br />
+            <p>Has {vote[selected]} votes</p>
             <button onClick={() => handleAnecdotesClick()}>next anecdotes</button>
+            <button onClick={() => handleVoteClick()}>vote</button>
         </div>
     )
 
