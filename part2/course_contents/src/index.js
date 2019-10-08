@@ -17,6 +17,7 @@ const Part = (props) => {
 const Content = (props) => {
     const parts = props.parts
     const components_part = parts.map((part) => <Part key={part.id} part={part} />)
+   
     return (
         <>
             {components_part}
@@ -35,6 +36,16 @@ const Course = (props) => {
         </div>
     )
 }
+const Courses =(props)=>{
+    const course_componets= props.courses_json.map((course) => <Course course_json ={course} key={course.id}/>)
+
+    return(
+        <>
+        {course_componets}
+        </>
+    )
+
+}
 const Total = (props) => {
     const parts = props.parts
     const totalAmount = parts.reduce((sum, part) => sum + part.exercises, 0)
@@ -46,41 +57,61 @@ const Total = (props) => {
     )
 }
 
-const App = () => {
-    const course = {
-        name: 'Half Stack application development',
-        parts: [
-            {
-                name: 'Fundamentals of React',
-                exercises: 10,
-                id: 1
-            },
-            {
-                name: 'Using props to pass data',
-                exercises: 7,
-                id: 2
-            },
-            {
-                name: 'State of a component',
-                exercises: 14,
-                id: 3
-            },
-            {
-                name: 'Redux',
-                exercises: 11,
-                id: 4
-            }
 
+
+const App = () => {
+    const courses = [
+      {
+        name: 'Half Stack application development',
+        id: 1,
+        parts: [
+          {
+            name: 'Fundamentals of React',
+            exercises: 10,
+            id: 1
+          },
+          {
+            name: 'Using props to pass data',
+            exercises: 7,
+            id: 2
+          },
+          {
+            name: 'State of a component',
+            exercises: 14,
+            id: 3
+          },
+          {
+            name: 'Redux',
+            exercises: 11,
+            id: 4
+          }
         ]
-    }
+      }, 
+      {
+        name: 'Node.js',
+        id: 2,
+        parts: [
+          {
+            name: 'Routing',
+            exercises: 3,
+            id: 1
+          },
+          {
+            name: 'Middlewares',
+            exercises: 7,
+            id: 2
+          }
+        ]
+      }
+    ]
 
 
     return (
         <div>
-            <Course course_json={course} />
+            <Courses courses_json={courses} />
         </div>
     )
-}
+}       
 
 
 
