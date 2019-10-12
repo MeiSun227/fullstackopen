@@ -2,12 +2,44 @@ import React, { useState } from 'react'
 
 const Person = (props) => {
   return (
-    <p>{ props.name} {props.number}</p>
-    
+    <p>{props.name} {props.number}</p>
+
 
   )
 }
 
+const Persons = (props) => {
+  const person_components = props.persons.map((person) => <Person key={person.name} name={person.name} number={person.number} />)
+  return (
+    <>
+      {person_components}
+    </>
+  )
+}
+
+const PersonForm = (props) => {
+
+  return (
+    <>
+      <div>
+        name: <input value={props.newName} onChange={props.handleNameChange} />
+        <div>number: <input value={props.newNumber} onChange={props.handleNumberChange} /></div>
+      </div>
+
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </>
+  )
+}
+
+const Filter = (props) => {
+  return (
+    <>
+      filter shown name <input value={props.search} onChange={props.handleSearchChange} />
+    </>
+  )
+}
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -24,9 +56,9 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    const personsObject = { name: newName , number: newNumber }
-    const names = persons.map((person)=> person.name)
-    
+    const personsObject = { name: newName, number: newNumber }
+    const names = persons.map((person) => person.name)
+
 
     names.includes(newName) ? alert(`${newName} is already added to phonebook`) : setPersons(persons.concat(personsObject))
     setNewName('')
@@ -35,46 +67,34 @@ const App = () => {
   }
 
   const handleNameChange = (event) => {
-   
+
     setNewName(event.target.value)
   }
-  const handleNumberChange =(event)=>{
+  const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
   }
 
-const nameToShow = persons.filter( person => person.name.toUpperCase().includes(search.toUpperCase()))
-console.log(nameToShow)
+  const nameToShow = persons.filter(person => person.name.toUpperCase().includes(search.toUpperCase()))
 
-const showPerson = search ? nameToShow : persons
+  const showedPersons = search ? nameToShow : persons
 
-const handleSearchChange =(event) =>{
- 
-  setNewSearch (event.target.value)
-  console.log(search)
-}
+  const handleSearchChange = (event) => {
 
-  const person_components = showPerson.map((person) => <Person key={person.name} name={person.name} number={person.number} />)
+    setNewSearch(event.target.value)
+  }
 
   return (
     <div>
       <h1>Phonebook</h1>
       <form onSubmit={addPerson}>
-        filter shown name <input value={search} onChange={handleSearchChange}/>
+        <Filter handleSearchChange={handleSearchChange} search={search} />
         <h2>add new number</h2>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-          <div>number: <input value={newNumber} onChange={handleNumberChange}/></div>
-        </div>
-
-        <div>
-          <button type="submit">add</button>
-        </div>
+        <PersonForm handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} newName={newName} newNumber={newNumber} />
       </form>
       <h2>Numbers</h2>
-      {person_components}
-
+      <Persons persons={showedPersons} />
     </div>
-   
+
   )
 }
 
