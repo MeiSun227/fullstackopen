@@ -5,7 +5,9 @@ import axios from 'axios'
 
 const Country = (props) => {
     return (
-        <p>{props.name} </p>
+        <>
+            <p>{props.country.name}  </p>  <button onClick={() => props.buttonFunction(props.country.name)}>show</button>
+        </>
     )
 }
 
@@ -17,8 +19,7 @@ const DetailOfCountry = (props) => {
             <p>Population: {props.country.population}</p>
             <h2>languages</h2>
             <Languages languages={props.country.languages} />
-            <img src={props.country.flag} height="120" width="240"></img>
-
+            <img src={props.country.flag} height="120" width="240" alt="not found"></img>
         </>
     )
 }
@@ -44,14 +45,19 @@ const App = () => {
     const [countries, setNewCountries] = useState([])
     const [search, setNewSearch] = useState('')
 
-    const countriesToShow = countries.filter(country => country.name.toUpperCase().includes(search.toUpperCase()))
-    const showedCountriesList = search ? countriesToShow : []
-    const countriesComponets = showedCountriesList.map((country) => <Country key={country.alpha3Code} name={country.name} />)
-    const displayCompenets = showedCountriesList.length === 1 ? <DetailOfCountry country={showedCountriesList[0]} /> : countriesComponets
-
     const handleSearchChange = (event) => {
         setNewSearch(event.target.value)
     }
+
+    const handleClick = (country_name) => {
+        setNewSearch(country_name)
+    }
+
+    const countriesToShow = countries.filter(country => country.name.toUpperCase().includes(search.toUpperCase()))
+    const showedCountriesList = search ? countriesToShow : []
+    const countriesComponets = showedCountriesList.map((country) => <Country key={country.alpha3Code} country={country} buttonFunction={handleClick} />)
+    const displayCompenents = showedCountriesList.length === 1 ? <DetailOfCountry country={showedCountriesList[0]} /> : countriesComponets 
+    
 
     useEffect(() => {
         axios
@@ -61,12 +67,11 @@ const App = () => {
                 setNewCountries(response.data)
             })
     }, [])
-    console.log(countriesToShow)
 
     return (
         <div>
             find countries:  <input value={search} onChange={handleSearchChange} />
-            <div>{displayCompenets}</div>
+            <div>{displayCompenents}</div>
         </div>
     )
 }
