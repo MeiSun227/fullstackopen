@@ -20,6 +20,29 @@ const DetailOfCountry = (props) => {
             <h2>languages</h2>
             <Languages languages={props.country.languages} />
             <img src={props.country.flag} height="120" width="240" alt="not found"></img>
+            <Weather city={props.country.capital}/>
+        </>
+    )
+}
+
+const Weather = (props) => {
+    const [weather, setWeather] = useState('')
+    const key = "a018616bcba97f9da69ec73400c8f84e"
+    const city = props.city
+    useEffect(() => {
+        axios
+            .get(`http://api.weatherstack.com/current?access_key=${key}&query=${city}`)
+            .then(response => {
+                console.log(response.data.current)
+                setWeather(response.data.current)
+            })
+    }, [])
+    return (
+        <>
+        <h2>Weather in {city}</h2>
+        <p><b>temperature: </b>{weather.temperature} celsius</p>
+        <img src={weather.weather_icons} height="120" width="180" alt="not found"></img>
+        <p><b>wind: </b>{weather.wind_speed} kph direction {weather.wind_dir}</p>
         </>
     )
 }
