@@ -67,6 +67,12 @@ const App = () => {
     setNewName('')
     setNewNumber('')
     setNewSearch('')
+
+    axios
+    .post('http://localhost:3001/persons', personsObject)
+    .then(response => {
+      console.log(response)
+    })
   }
 
   const handleNameChange = (event) => {
