@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import personsService from './services/persons'
 
 const Person = (props) => {
+  console.log(props.person)
   return (
-    <p>{props.name} {props.number}</p>
+    <p>{props.person.name} {props.person.number} <button onClick={() => { props.handleDelete(props.person) }} >delete</button></p>
 
 
   )
 }
 
 const Persons = (props) => {
-  const person_components = props.persons.map((person) => <Person key={person.name} name={person.name} number={person.number} />)
+  const person_components = props.persons.map((person) => <Person key={person.id} person={person} handleDelete={props.handleDelete} />)
   return (
     <>
       {person_components}
@@ -84,6 +84,20 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const handleDeletePerson = (personToDelete) => {
+    if (window.confirm("Delete " + personToDelete.name + "?")) { 
+      personsService.deletePerson(personToDelete.id)
+      .then(response => {
+        personsService
+          .getAll()
+          .then(response => {
+            setPersons(response.data)
+          })
+      })
+    }
+
+  }
+
   const nameToShow = persons.filter(person => person.name.toUpperCase().includes(search.toUpperCase()))
 
   const showedPersons = search ? nameToShow : persons
@@ -102,7 +116,7 @@ const App = () => {
         <PersonForm handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} newName={newName} newNumber={newNumber} />
       </form>
       <h2>Numbers</h2>
-      <Persons persons={showedPersons} />
+      <Persons persons={showedPersons} handleDelete={handleDeletePerson} />
     </div>
 
   )
