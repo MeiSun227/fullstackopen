@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import personsService from './services/persons'
 
 const Person = (props) => {
-  console.log(props.person)
   return (
     <p>{props.person.name} {props.person.number} <button onClick={() => { props.handleDelete(props.person) }} >delete</button></p>
 
@@ -57,23 +56,35 @@ const App = () => {
       })
   }, [])
 
-
-  const addPerson = (event) => {
-    event.preventDefault()
-    const personsObject = { name: newName, number: newNumber }
-    const names = persons.map((person) => person.name)
-
-
-    names.includes(newName) ? alert(`${newName} is already added to phonebook`) : setPersons(persons.concat(personsObject))
-    setNewName('')
-    setNewNumber('')
-    setNewSearch('')
-
+  const createPerson = (persons, name, number) => {
+    const personObject = { name: newName, number: newNumber }
+    setPersons(persons.concat(personObject))
     personsService
-      .create(personsObject)
+      .create(personObject)
       .then(response => {
         console.log(response)
       })
+  }
+
+  const updatePerson = (persons, name, number) => {
+    if (window.confirm(`${name} is already added to the phonebook, replace old number with a new one?`)) {
+      let updatedPerson = persons.filter(person => person.name === name)[0]
+      updatedPerson.number = number
+      personsService
+        .update(updatedPerson.id, updatedPerson)
+        .then(response => {
+          console.log(response)
+        })
+    }
+  }
+
+  const addPerson = (event) => {
+    event.preventDefault()
+    const names = persons.map((person) => person.name)
+    names.includes(newName) ? updatePerson(persons, newName, newNumber) : createPerson(persons, newName, newNumber)
+    setNewName('')
+    setNewNumber('')
+    setNewSearch('')
   }
 
   const handleNameChange = (event) => {
@@ -85,15 +96,15 @@ const App = () => {
   }
 
   const handleDeletePerson = (personToDelete) => {
-    if (window.confirm("Delete " + personToDelete.name + "?")) { 
+    if (window.confirm("Delete " + personToDelete.name + "?")) {
       personsService.deletePerson(personToDelete.id)
-      .then(response => {
-        personsService
-          .getAll()
-          .then(response => {
-            setPersons(response.data)
-          })
-      })
+        .then(response => {
+          personsService
+            .getAll()
+            .then(response => {
+              setPersons(response.data)
+            })
+        })
     }
 
   }
