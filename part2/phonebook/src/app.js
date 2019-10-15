@@ -49,18 +49,29 @@ const Notification = ({ message }) => {
   }
 
   return (
+    <div className="add">
+      {message}
+    </div>
+  )
+}
+const ErrorNotification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
     <div className="error">
       {message}
     </div>
   )
 }
-
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setNewSearch] = useState('')
   const [message, setMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personsService
@@ -78,8 +89,9 @@ const App = () => {
       .then(response => {
         setMessage("Added " + name)
         setTimeout(() => {
-          setMessage(null)}, 2000)
-      
+          setMessage(null)
+        }, 2000)
+
       })
   }
 
@@ -122,6 +134,13 @@ const App = () => {
               setPersons(response.data)
             })
         })
+        .catch(error => {
+          setErrorMessage("Information of " + personToDelete.name + " has already been removed from server")
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 2000)
+
+        })
     }
 
   }
@@ -140,6 +159,7 @@ const App = () => {
       <h1>Phonebook</h1>
       <form onSubmit={addPerson}>
         <Notification message={message} />
+        <ErrorNotification message={errorMessage} />
         <Filter handleSearchChange={handleSearchChange} search={search} />
         <h2>add new number</h2>
         <PersonForm handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} newName={newName} newNumber={newNumber} />
