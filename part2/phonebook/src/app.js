@@ -83,17 +83,25 @@ const App = () => {
 
   const createPerson = (persons, name, number) => {
     const personObject = { name: newName, number: newNumber }
-    setPersons(persons.concat(personObject))
     personsService
       .create(personObject)
-      .then(response => {
-        setMessage("Added " + name)
-        setTimeout(() => {
-          setMessage(null)
-        }, 2000)
-
+      .then(createdPerson => {
+        personsService
+          .getAll()
+          .then(response => {
+            setPersons(response.data)
+            setMessage("Added " + name)
+          })
       })
+      .catch(error => {
+        setErrorMessage(error.response.data.error)
+      })
+    setTimeout(() => {
+      setMessage(null)
+      setErrorMessage(null)
+    }, 2000)
   }
+
 
   const updatePerson = (persons, name, number) => {
     if (window.confirm(`${name} is already added to the phonebook, replace old number with a new one?`)) {
