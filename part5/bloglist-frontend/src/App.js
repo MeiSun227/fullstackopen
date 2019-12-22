@@ -4,15 +4,44 @@ import blogsService from './services/blogs'
 
 const Blog = (props) => {
   return (
-    <p>  {props.blog.author} {props.blog.title} {props.blog.id} {props.blog.url}</p>
+    <p>{props.blog.title} {props.blog.author}</p>
   )
 }
+const BlogForm = (props) => {
+  return (
+    <>
+      <div>
+        title: <input value={props.newTitle} onChange={props.handleTitleChange} />
+        <div> author: <input value={props.newAuthor} onChange={props.handleAuthorChange} /></div>
+        <div> url: <input value={props.newUrl} onChange={props.handleUrlChange} /></div>
+      </div>
+
+      <div>
+        <button type="submit">create</button>
+      </div>
+    </>
+  )
+}
+
+const Blogs = (props) => {
+  const blog_components = props.blogs.map((blog) => <Blog key={blog.id} blog={blog} />)
+  return (
+    <>
+      {blog_components}
+    </>
+  )
+}
+
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
   const [blogs, setBlogs] = useState([])
+  const [newTitle, setNewTitle] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newUrl, setNewUrl] = useState('')
+
 
   useEffect(() => {
     blogsService
@@ -36,17 +65,40 @@ const App = () => {
         username, password
       })
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-
+      blogsService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
-
     } catch (exception) {
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
     }
+  }
+
+  const createBlog = (event) => {
+    event.preventDefault()
+    const blogObject = { title: newTitle, author: newAuthor, url: newUrl }
+    blogsService
+      .createBlog(blogObject)
+      .then(createdBlog => {
+        blogsService
+          .getAll()
+          .then(response => {
+            setBlogs(response.data)
+          })
+      })
+  }
+
+  const handleTitleChange = (event) => {
+    setNewTitle(event.target.value)
+  }
+  const handleAuthorChange = (event) => {
+    setNewAuthor(event.target.value)
+  }
+  const handleUrlChange = (event) => {
+    setNewUrl(event.target.value)
   }
 
   const handleLogout = () => {
@@ -74,22 +126,21 @@ const App = () => {
         <button type="submit">login</button>
       </form>
     )
-  }
-  else {
+  } else {
     return (
       <div>
         <h2>blogs</h2>
         <p>{user.name} is logged in </p>
         <input type="button"
-            value="logout"
-            onClick={() => handleLogout()} />
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
-        )}
-      
+          value="logout"
+          onClick={() => handleLogout()} />
+        <h2>create new blog</h2>
+        <form onSubmit={createBlog}>
+          <BlogForm handleTitleChange={handleTitleChange} handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} newtitle={newTitle} newAuthor={newAuthor} newUrl={newUrl} />
+        </form>
+        <Blogs blogs={blogs}/>
       </div>
     )
   }
 }
-
 export default App;
