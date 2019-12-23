@@ -1,64 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import Blogs from './components/Blogs'
+import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
+import ErrorNotification from './components/ErrorNotification'
+import Togglable from './components/Togglable'
 import loginService from './services/login'
 import blogsService from './services/blogs'
 import './index.css'
 
-const Blog = (props) => {
-  return (
-    <p>{props.blog.title} {props.blog.author}</p>
-  )
-}
-const BlogForm = (props) => {
-  return (
-    <>
-      <div>
-        title: <input value={props.newTitle} onChange={props.handleTitleChange} />
-        <div> author: <input value={props.newAuthor} onChange={props.handleAuthorChange} /></div>
-        <div> url: <input value={props.newUrl} onChange={props.handleUrlChange} /></div>
-      </div>
 
-      <div>
-        <button type="submit">create</button>
-      </div>
-    </>
-  )
-}
-
-const Blogs = (props) => {
-  if ((props) && (props.blogs !== null)) {
-    const blog_components = props.blogs.map((blog) => <Blog key={blog.id} blog={blog} />)
-    return (
-      <>
-        {blog_components}
-      </>
-    )
-  } else {
-    return (<></>)
-  }
-}
-
-const Notification =({message}) => {
-  if (message === null) {
-    return null
-  }
-  
-  return (
-    <div class="add">
-      {message}
-    </div>
-  )
-}
-
-const ErrorNotification = ({ message }) => {
-  if (message === null) {
-    return null
-  }
-  return (
-    <div class="error">
-      {message}
-    </div>
-  )
-}
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -70,7 +20,7 @@ const App = () => {
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
   const [message, setMessage] = useState(null)
-  
+
 
   useEffect(() => {
     blogsService
@@ -116,7 +66,7 @@ const App = () => {
           .getAll()
           .then(response => {
             setBlogs(response)
-            setMessage( " a new blog " + blogObject.title + " by "+ blogObject.author + " added " )
+            setMessage(" a new blog " + blogObject.title + " by " + blogObject.author + " added ")
           })
       })
     setTimeout(() => {
@@ -159,7 +109,7 @@ const App = () => {
 
         </div>
         <button type="submit">login</button>
-        <ErrorNotification message={errorMessage}/>
+        <ErrorNotification message={errorMessage} />
       </form>
     )
   } else {
@@ -171,11 +121,13 @@ const App = () => {
           value="logout"
           onClick={() => handleLogout()} />
         <h2>create new blog</h2>
-        <form onSubmit={createBlog}>
-        <Notification message={message} />
-          <BlogForm handleTitleChange={handleTitleChange} handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} newtitle={newTitle} newAuthor={newAuthor} newUrl={newUrl} />
-        </form>
-        <Blogs blogs={blogs}/>
+        <Togglable buttonLabel="new blog">
+          <form onSubmit={createBlog}>
+            <Notification message={message} />
+            <BlogForm handleTitleChange={handleTitleChange} handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} newtitle={newTitle} newAuthor={newAuthor} newUrl={newUrl} />
+          </form>
+        </Togglable>
+        <Blogs blogs={blogs} />
       </div>
     )
   }
