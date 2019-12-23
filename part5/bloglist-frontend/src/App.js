@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import loginService from './services/login'
 import blogsService from './services/blogs'
+import './index.css'
 
 const Blog = (props) => {
   return (
@@ -24,11 +25,38 @@ const BlogForm = (props) => {
 }
 
 const Blogs = (props) => {
-  const blog_components = props.blogs.map((blog) => <Blog key={blog.id} blog={blog} />)
+  if ((props) && (props.blogs !== null)) {
+    const blog_components = props.blogs.map((blog) => <Blog key={blog.id} blog={blog} />)
+    return (
+      <>
+        {blog_components}
+      </>
+    )
+  } else {
+    return (<></>)
+  }
+}
+
+const Notification =({message}) => {
+  if (message === null) {
+    return null
+  }
+  
   return (
-    <>
-      {blog_components}
-    </>
+    <div class="add">
+      {message}
+    </div>
+  )
+}
+
+const ErrorNotification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div class="error">
+      {message}
+    </div>
   )
 }
 
@@ -36,12 +64,13 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
   const [blogs, setBlogs] = useState([])
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
-
+  const [message, setMessage] = useState(null)
+  
 
   useEffect(() => {
     blogsService
@@ -70,7 +99,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setErrorMessage("wrong username or password")
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -86,10 +115,16 @@ const App = () => {
         blogsService
           .getAll()
           .then(response => {
-            setBlogs(response.data)
+            setBlogs(response)
+            setMessage( " a new blog " + blogObject.title + " by "+ blogObject.author + " added " )
           })
       })
+    setTimeout(() => {
+      setMessage(null)
+      setErrorMessage(null)
+    }, 2000)
   }
+
 
   const handleTitleChange = (event) => {
     setNewTitle(event.target.value)
@@ -124,6 +159,7 @@ const App = () => {
 
         </div>
         <button type="submit">login</button>
+        <ErrorNotification message={errorMessage}/>
       </form>
     )
   } else {
@@ -136,6 +172,7 @@ const App = () => {
           onClick={() => handleLogout()} />
         <h2>create new blog</h2>
         <form onSubmit={createBlog}>
+        <Notification message={message} />
           <BlogForm handleTitleChange={handleTitleChange} handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} newtitle={newTitle} newAuthor={newAuthor} newUrl={newUrl} />
         </form>
         <Blogs blogs={blogs}/>
