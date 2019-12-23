@@ -127,7 +127,7 @@ const App = () => {
             <BlogForm handleTitleChange={handleTitleChange} handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} newtitle={newTitle} newAuthor={newAuthor} newUrl={newUrl} />
           </form>
         </Togglable>
-        <Blogs blogs={blogs} />
+          <Blogs key={blogs.title} blogs={blogs} />
       </div>
     )
   }
