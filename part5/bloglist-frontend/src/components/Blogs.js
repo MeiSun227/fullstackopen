@@ -5,6 +5,7 @@ import TogglableBlogDetail from './TogglableBlogDetail'
 
 const Blogs = ({blogs,handleLikeChange}) => {
   if (blogs !== null) {
+    blogs.sort((a,b) => (a.likes < b.likes) ? 1 : ((b.likes < a.likes) ? -1 : 0)); 
     const blog_components = blogs.map((blog) => <TogglableBlogDetail title={blog.title}><Blog key={blog.id} blog={blog} handleLikeChange={handleLikeChange}/></TogglableBlogDetail>)
     return (
       <>
