@@ -65,7 +65,6 @@ const App = () => {
           .getAll()
           .then(response => {
             setBlogs(response)
-            console.log(response)
             setMessage(" a new blog " + blogObject.title + " by " + blogObject.author + " added ")
           })
       })
@@ -105,6 +104,19 @@ const App = () => {
       })
   }
 
+  const handleDeleteBlog = (blogToDelete ,event) => {
+    event.preventDefault()
+    if (window.confirm("Remove blog " + blogToDelete.title + " by " + blogToDelete.author)) {
+      blogsService.deleteBlog(blogToDelete.id)
+        .then(response => {
+          blogsService
+            .getAll()
+            .then(response => {
+              setBlogs(response)
+            })
+        })
+    }
+  }
 
   if (user === null) {
     return (
@@ -142,7 +154,7 @@ const App = () => {
             <BlogForm handleTitleChange={handleTitleChange} handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} newtitle={newTitle} newAuthor={newAuthor} newUrl={newUrl} />
           </form>
         </Togglable>
-        <Blogs key={blogs.title} blogs={blogs} handleLikeChange={handleLikeChange} />
+        <Blogs key={blogs.title} blogs={blogs} handleLikeChange={handleLikeChange} handleDeleteBlog={handleDeleteBlog} />
       </div>
     )
   }
