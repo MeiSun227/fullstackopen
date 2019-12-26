@@ -1,15 +1,15 @@
 import React from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog,handleLikeChange}) => {
 
   return (
     <>
-       <p> <a href ="#">{blog.url}</a></p>
-        <div>
+      <p> <a href="#">{blog.url}</a></p>
+      <div>
         {blog.likes} likes
-        <button>like</button>
+  <button onClick={(event) => handleLikeChange(blog, event)}>like</button>
       </div>
-        <p>added by {blog.author}</p>
+      <p>added by {blog.author}</p>
     </>
   )
 }

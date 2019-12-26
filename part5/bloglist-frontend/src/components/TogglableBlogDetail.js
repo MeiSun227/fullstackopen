@@ -24,17 +24,17 @@ const TogglableBlogDetail = React.forwardRef((props, ref) => {
     marginBottom: 5
   };
   return (
-    <div>
+    <div style={blogStyle}>
       <div style={hideWhenVisible}>
-        <p onClick={toggleVisibility} style={blogStyle}>
+        <p onClick={toggleVisibility}>
           {props.title}
         </p>
       </div>
       <div style={showWhenVisible}>
-        <p onClick={toggleVisibility} style={blogStyle}>
+        <p onClick={toggleVisibility}>
           {props.title}
-          {props.children}
         </p>
+        {props.children}
       </div>
     </div>
   )

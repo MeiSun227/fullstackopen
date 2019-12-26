@@ -21,7 +21,6 @@ const App = () => {
   const [newUrl, setNewUrl] = useState('')
   const [message, setMessage] = useState(null)
 
-
   useEffect(() => {
     blogsService
       .getAll().then(blogs => {
@@ -66,6 +65,7 @@ const App = () => {
           .getAll()
           .then(response => {
             setBlogs(response)
+            console.log(response)
             setMessage(" a new blog " + blogObject.title + " by " + blogObject.author + " added ")
           })
       })
@@ -90,6 +90,21 @@ const App = () => {
     window.localStorage.clear()
     setUser(null)
   }
+
+  const handleLikeChange = (blog, event) => {
+    event.preventDefault()
+    blog.likes += 1
+    blogsService
+      .update(blog.id, blog)
+      .then(response => {
+        blogsService
+          .getAll()
+          .then(response => {
+            setBlogs(response)
+          })
+      })
+  }
+
 
   if (user === null) {
     return (
@@ -127,7 +142,7 @@ const App = () => {
             <BlogForm handleTitleChange={handleTitleChange} handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} newtitle={newTitle} newAuthor={newAuthor} newUrl={newUrl} />
           </form>
         </Togglable>
-          <Blogs key={blogs.title} blogs={blogs} />
+        <Blogs key={blogs.title} blogs={blogs} handleLikeChange={handleLikeChange} />
       </div>
     )
   }
