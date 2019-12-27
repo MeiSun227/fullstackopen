@@ -1,4 +1,4 @@
-import React, { useState, useImperativeHandle } from "react";
+import React, { useState, useImperativeHandle } from "react"
 
 const TogglableBlogDetail = React.forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
@@ -13,16 +13,16 @@ const TogglableBlogDetail = React.forwardRef((props, ref) => {
   useImperativeHandle(ref, () => {
     return {
       toggleVisibility
-    };
-  });
+    }
+  })
 
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: "solid",
+    border: ' solid ',
     borderWidth: 1,
     marginBottom: 5
-  };
+  }
   return (
     <div style={blogStyle}>
       <div style={hideWhenVisible}>

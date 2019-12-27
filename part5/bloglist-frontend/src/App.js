@@ -48,7 +48,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage("wrong username or password")
+      setErrorMessage('wrong username or password')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -65,7 +65,7 @@ const App = () => {
           .getAll()
           .then(response => {
             setBlogs(response)
-            setMessage(" a new blog " + blogObject.title + " by " + blogObject.author + " added ")
+            setMessage(' a new blog ' + blogObject.title + ' by ' + blogObject.author + ' added ')
           })
       })
     setTimeout(() => {
@@ -104,9 +104,9 @@ const App = () => {
       })
   }
 
-  const handleDeleteBlog = (blogToDelete ,event) => {
+  const handleDeleteBlog = (blogToDelete, event) => {
     event.preventDefault()
-    if (window.confirm("Remove blog " + blogToDelete.title + " by " + blogToDelete.author)) {
+    if (window.confirm(' Remove blog ' + blogToDelete.title + ' by ' + blogToDelete.author)) {
       blogsService.deleteBlog(blogToDelete.id)
         .then(response => {
           blogsService
@@ -122,20 +122,20 @@ const App = () => {
     return (
       <form onSubmit={handleLogin}>
         <div> Username
-      <input type="text"
+      <input type=' text '
             value={username}
-            name="Username"
+            name=' Username '
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>
         <div> Password
-      <input type="password"
+      <input type=' password '
             value={password}
-            name="Password"
+            name=' Password '
             onChange={({ target }) => setPassword(target.value)} />
 
         </div>
-        <button type="submit">login</button>
+        <button type=' submit '>login</button>
         <ErrorNotification message={errorMessage} />
       </form>
     )
@@ -144,11 +144,11 @@ const App = () => {
       <div>
         <h2>blogs</h2>
         <p>{user.name} is logged in </p>
-        <input type="button"
-          value="logout"
+        <input type=' button '
+          value=' logout '
           onClick={() => handleLogout()} />
         <h2>create new blog</h2>
-        <Togglable buttonLabel="new blog">
+        <Togglable buttonLabel=' new blog '>
           <form onSubmit={createBlog}>
             <Notification message={message} />
             <BlogForm handleTitleChange={handleTitleChange} handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} newtitle={newTitle} newAuthor={newAuthor} newUrl={newUrl} />
@@ -159,4 +159,4 @@ const App = () => {
     )
   }
 }
-export default App;
+export default App

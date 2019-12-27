@@ -5,7 +5,7 @@ let token = null
 
 const setToken = newToken => {
   token = `bearer ${newToken}`
-  axios.defaults.headers.common['Authorization'] = token;
+  axios.defaults.headers.common['Authorization'] = token
 }
 const getAll = () => {
   const request = axios.get(baseUrl)
@@ -20,7 +20,7 @@ const createBlog = async (blogObject) => {
   return response.data
 }
 
-const deleteBlog = async (id) =>{
+const deleteBlog = async (id) => {
   const config = {
     headers: { Authorization: token },
   }
