@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog,handleLikeChange,handleDeleteBlog}) => {
   const savedUser = JSON.parse(window.localStorage.getItem('loggedBlogappUser'))
@@ -28,6 +29,11 @@ if (blog.user.username === savedUser.username) {
     </>
   )
 }
+}
 
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  handleLikeChange: PropTypes.func.isRequired,
+  handleDeleteBlog: PropTypes.func.isRequired
 }
 export default Blog
