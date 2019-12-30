@@ -2,19 +2,29 @@ const blogs = [
   {
     title: "Canonical string reduction",
     author: "Edsger W. Dijkstra",
-    likes: 12
+    likes: 12,
+    user: {
+      username: 'tester'
+    }
   },
 
   {
     title: "Finlandcocos",
     author: "Robert C. Martin",
-    likes: 4
+    likes: 4,
+    user: {
+      username: 'tester'
+    }
   },
   {
     title: "Santa is a dream man",
     author: "Maye Ikava",
-    likes: 1
+    likes: 1,
+    user: {
+      username: 'tester'
+    }
   }
+  
 ]
 
 const getAll = () => {
