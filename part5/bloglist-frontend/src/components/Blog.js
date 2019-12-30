@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, handleLikeChange, handleDeleteBlog }) => {
-  const savedUser = JSON.parse(window.localStorage.getItem('loggedBlogappUser'))
-  if (blog.user.username === savedUser.username) {
+const Blog = ({ blog, user, handleLikeChange, handleDeleteBlog }) => {
+  if (blog.user.username === user.username) {
     return (
       <>
         <p> <a href="#">{blog.url}</a></p>

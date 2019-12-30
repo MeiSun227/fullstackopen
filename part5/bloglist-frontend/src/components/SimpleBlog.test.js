@@ -14,7 +14,6 @@ test('renders content', () => {
   const component = render(
     <SimpleBlog blog={blog} />
   )
-
   expect(component.container).toHaveTextContent(
     ' kimchi '
   )
@@ -26,8 +25,8 @@ test('clicking the button twice calls event handler twice', () => {
     title: ' Coming soon trailer ',
     author: ' kimchi ',
     likes: 100
-    
   }
+
   const mockHandler = jest.fn()
 
   const { getByText } = render(

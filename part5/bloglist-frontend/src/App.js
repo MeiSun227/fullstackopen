@@ -154,7 +154,7 @@ const App = () => {
             <BlogForm handleTitleChange={handleTitleChange} handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} newtitle={newTitle} newAuthor={newAuthor} newUrl={newUrl} />
           </form>
         </Togglable>
-        <Blogs key={blogs.title} blogs={blogs} handleLikeChange={handleLikeChange} handleDeleteBlog={handleDeleteBlog} />
+        <Blogs key={blogs.title} blogs={blogs} user={user} handleLikeChange={handleLikeChange} handleDeleteBlog={handleDeleteBlog} />
       </div>
     )
   }
