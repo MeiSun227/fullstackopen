@@ -1,20 +1,16 @@
 import React from 'react'
 
-
 const BlogForm = ({
-  newTitle,
-  newAuthor,
-  newUrl,
-  handleTitleChange,
-  handleAuthorChange,
-  handleUrlChange
+ title,
+  author,
+  url
 }) => {
   return (
     <>
       <div>
-        title: <input value={newTitle} onChange={handleTitleChange} />
-        <div> author: <input value={newAuthor} onChange={handleAuthorChange} /></div>
-        <div> url: <input value={newUrl} onChange={handleUrlChange} /></div>
+        title: <input value={title.value} onChange={title.onChange} />
+        <div> author: <input value={author.value} onChange={author.onChange} /></div>
+        <div> url: <input value={url.value} onChange={url.onChange} /></div>
       </div>
 
       <div>

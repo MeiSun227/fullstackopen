@@ -7,7 +7,7 @@ import Togglable from './components/Togglable'
 import loginService from './services/login'
 import blogsService from './services/blogs'
 import './index.css'
-import  { useField } from './hooks'
+import { useField } from './hooks'
 
 
 const App = () => {
@@ -16,9 +16,9 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [blogs, setBlogs] = useState([])
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
+  const title = useField('text')
+  const author = useField('text')
+  const url = useField('text')
   const [message, setMessage] = useState(null)
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const App = () => {
     if (localStorage) {
       loggedUserJSON = localStorage.getItem('loggedBlogAppUser')
     }
-    if(window.localStorage){
+    if (window.localStorage) {
       loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     }
     if (loggedUserJSON) {
@@ -47,7 +47,7 @@ const App = () => {
     try {
       const user = await loginService.login({
         username: username.value,
-         password: password.value
+        password: password.value
       })
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       blogsService.setToken(user.token)
@@ -62,7 +62,7 @@ const App = () => {
 
   const createBlog = (event) => {
     event.preventDefault()
-    const blogObject = { title: newTitle, author: newAuthor, url: newUrl }
+    const blogObject = { title: title.value, author: author.value, url: url.value }
     blogsService
       .createBlog(blogObject)
       .then(createdBlog => {
@@ -73,22 +73,15 @@ const App = () => {
             setMessage(' a new blog ' + blogObject.title + ' by ' + blogObject.author + ' added ')
           })
       })
+    title.reset()
+    author.reset()
+    url.reset()
     setTimeout(() => {
       setMessage(null)
       setErrorMessage(null)
     }, 2000)
   }
 
-
-  const handleTitleChange = (event) => {
-    setNewTitle(event.target.value)
-  }
-  const handleAuthorChange = (event) => {
-    setNewAuthor(event.target.value)
-  }
-  const handleUrlChange = (event) => {
-    setNewUrl(event.target.value)
-  }
 
   const handleLogout = () => {
     window.localStorage.clear()
@@ -137,7 +130,8 @@ const App = () => {
       <input type={password.type}
             value={password.value}
             name=' Password '
-            onChange={password.onChange} />
+            onChange={password.onChange}
+          />
 
         </div>
         <button type=' submit '>login</button>
@@ -156,7 +150,7 @@ const App = () => {
         <Togglable buttonLabel=' new blog '>
           <form onSubmit={createBlog}>
             <Notification message={message} />
-            <BlogForm handleTitleChange={handleTitleChange} handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} newtitle={newTitle} newAuthor={newAuthor} newUrl={newUrl} />
+            <BlogForm title={title} author={author} url={url} />
           </form>
         </Togglable>
         <Blogs key={blogs.title} blogs={blogs} user={user} handleLikeChange={handleLikeChange} handleDeleteBlog={handleDeleteBlog} />
