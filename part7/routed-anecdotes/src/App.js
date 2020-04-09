@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BrowserRouter as Router, Switch, Route, Link ,  useParams} from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route, Link, useParams, useHistory } from "react-router-dom"
 
 const Menu = ({ anecdotes, addNew }) => {
   const padding = {
@@ -31,19 +31,19 @@ const Menu = ({ anecdotes, addNew }) => {
   )
 }
 
-const Anecdote =({anecdotes}) =>{
+const Anecdote = ({ anecdotes }) => {
   const id = useParams().id
   console.log(id)
-  const anecdote = anecdotes.find(n => n.id === id) 
+  const anecdote = anecdotes.find(n => n.id === id)
   console.log(anecdotes)
-    return (
-      <div>
-        <h2>{anecdote.content}</h2>
-        <div><p>has {anecdote.votes} votes</p></div>
-        <div><p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p></div>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <h2>{anecdote.content}</h2>
+      <div><p>has {anecdote.votes} votes</p></div>
+      <div><p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p></div>
+    </div>
+  )
+}
 
 const AnecdoteList = ({ anecdotes }) => (
   <div>
@@ -84,7 +84,7 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
-
+  const history = useHistory()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -94,6 +94,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    history.push('/')
   }
 
   return (
@@ -117,6 +118,12 @@ const CreateNew = (props) => {
     </div>
   )
 
+}
+const Notification=({message})=>{
+  return(
+    <div>{message}</div>
+
+  )
 }
 
 const App = () => {
@@ -142,8 +149,12 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote ${anecdote.content} created!`)
+    setTimeout(() => {
+      setNotification(null)
+    }, 10000)
   }
-
+  
   const anecdoteById = (id) =>
     anecdotes.find(a => a.id === id)
 
@@ -162,7 +173,7 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu anecdotes={anecdotes} addNew={addNew} />
-
+      <Notification message={notification} />
       <Footer />
     </div>
   )
