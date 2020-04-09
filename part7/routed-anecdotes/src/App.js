@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route, Link ,  useParams} from "react-router-dom"
 
 const Menu = ({ anecdotes, addNew }) => {
   const padding = {
@@ -15,24 +15,45 @@ const Menu = ({ anecdotes, addNew }) => {
 
       <Switch>
         <Route path="/create">
-          <CreateNew addNew={addNew}  />
+          <CreateNew addNew={addNew} />
         </Route>
         <Route path="/about">
           <About />
         </Route>
+        <Route path="/anecdotes/:id">
+          <Anecdote anecdotes={anecdotes} />
+        </Route>
         <Route path="/">
-          <AnecdoteList  anecdotes={anecdotes} />
+          <AnecdoteList anecdotes={anecdotes} />
         </Route>
       </Switch>
     </Router>
   )
 }
 
+const Anecdote =({anecdotes}) =>{
+  const id = useParams().id
+  console.log(id)
+  const anecdote = anecdotes.find(n => n.id === id) 
+  console.log(anecdotes)
+    return (
+      <div>
+        <h2>{anecdote.content}</h2>
+        <div><p>has {anecdote.votes} votes</p></div>
+        <div><p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p></div>
+      </div>
+    )
+  }
+
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote =>
+        <li key={anecdote.id}>
+          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+        </li>
+      )}
     </ul>
   </div>
 )
@@ -140,8 +161,8 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu  anecdotes={anecdotes} addNew={addNew} />
-  
+      <Menu anecdotes={anecdotes} addNew={addNew} />
+
       <Footer />
     </div>
   )
