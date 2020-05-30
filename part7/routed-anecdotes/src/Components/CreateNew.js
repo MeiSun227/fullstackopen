@@ -8,6 +8,7 @@ const CreateNew = (props) => {
   const info = useField('text')
   const history = useHistory()
 
+
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
@@ -19,8 +20,14 @@ const CreateNew = (props) => {
     history.push('/')
   }
 
+  const { reset: resetContent, ...contentfield } = content
+  const { reset: resetInfo, ...infoField } = info
+  const { reset: resetAuthor, ...authorField } = author
+
   const handleReset = () => {
-    content.reset()
+    resetContent()
+    resetInfo()
+    resetAuthor()
   }
 
   return (
@@ -30,23 +37,19 @@ const CreateNew = (props) => {
         <div>
           content
           <input
-            {...content} />
+            {...contentfield} />
         </div>
         <div>
           author
-          <input
-            type={author.type}
-            value={author.value}
-            onChange={author.onChange}
-            reset={author.reset} />
+          <input {...authorField}/>
         </div>
         <div>
           url for more info
-          <input 
-           {...info} />
+          <input
+            {...infoField} />
         </div>
         <button>create</button>
-        <button type="button" onClick={()=>handleReset()} >Reset</button>
+        <button type="button" onClick={() => handleReset()} >Reset</button>
       </form>
     </div>
   )
