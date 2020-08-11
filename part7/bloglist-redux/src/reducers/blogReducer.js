@@ -13,7 +13,9 @@ const blogReducer = (state = [], action) => {
       state = state.filter(blog => (blog.id !== action.data.id))
       return [...state]
     case 'CREATE_COMMENT':
-      return state.map(blog => blog.id === action.data.id)
+      console.log(action.data)
+      state = state.filter(blog => (blog.id !== action.data.id))
+      return [...state, action.data]
     default:
       return state;
   }
@@ -59,12 +61,13 @@ export const deleteBlogAction = (blog) => {
   }
 }
 
-export const createBlogComment = (comment) => {
+export const addCommentAction = (blog, comment) => {
   return async dispatch => {
-    const commentBlog = await blogService.addComment(comment)
+    const updatedBlog = await blogService.addComment(blog, comment)
+    console.log(updatedBlog)
     dispatch({
       type: 'CREATE_COMMENT',
-      data: commentBlog
+      data: updatedBlog
     })
   }
 }

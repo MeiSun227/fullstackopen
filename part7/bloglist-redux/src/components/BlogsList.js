@@ -17,7 +17,6 @@ const BlogsList = (props) => {
             <div key={blog.id}>
               <Blog key={blog.id} blog={blog} />
             </div>
-
           )}
         </div>
       </>
